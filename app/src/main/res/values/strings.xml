@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Political Preparedness</string>
+    <string name="logo">Logo</string>
+    <string name="upcoming_elections">Upcoming Elections</string>
+    <string name="find_my_representatives">Find my representatives</string>
+    <string name="representative_picture">Representative Picture</string>
+    <string name="representative_website">Representative Website</string>
+    <string name="representative_facebook">Representative Facebook</string>
+    <string name="representative_twitter">Representative Twitter</string>
 
     <!-- TODO: Add necessary string values -->
 
