@@ -9,3 +9,4 @@ data class Division(
         val country: String,
         val state: String
 ) : Parcelable
+

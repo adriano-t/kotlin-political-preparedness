@@ -101,7 +101,6 @@ class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
     override fun areContentsTheSame(r0: Representative, r1: Representative): Boolean {
         return r0 == r1
     }
-
 }
 
 class RepresentativeListener(val clickListener: (Representative) -> Unit) {

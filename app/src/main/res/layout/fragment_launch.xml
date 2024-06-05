@@ -27,11 +27,11 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/upcomingButton"
-            android:layout_width="395dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding"
             android:layout_marginStart="@dimen/default_padding"
             android:layout_marginEnd="@dimen/default_padding"
-            android:layout_marginBottom="@dimen/default_padding"
             android:background="@color/colorPrimaryDark"
             android:text="@string/upcoming_elections"
             android:textColor="@color/white"

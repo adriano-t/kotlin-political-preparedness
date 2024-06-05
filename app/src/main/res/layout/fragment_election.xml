@@ -3,14 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Add node to connect Election ViewModel -->
+    <!-- node to connect Election ViewModel -->
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.android.politicalpreparedness.election.ElectionsViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
-        <!-- TODO: Add Upcoming Election Recycler and Header -->
+        <!-- Header and Election Recycler -->
+        <TextView
+            android:id="@+id/election_list_header"
+            android:text="@string/elections"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_padding"
+            android:layout_marginEnd="@dimen/default_padding"
+            android:layout_marginTop="@dimen/default_padding"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+        />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upcoming_elections"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginHorizontal="@dimen/default_padding"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/election_list_header"
+            upcomingElections="@{viewModel.upcomingElections}" />
 
         <!-- TODO: Add Saved Election Recycler and Header -->
 

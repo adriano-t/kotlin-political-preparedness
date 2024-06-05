@@ -22,6 +22,7 @@
             android:textStyle="italic|bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{election.name}"
             tools:text="Election name" />
 
         <TextView
