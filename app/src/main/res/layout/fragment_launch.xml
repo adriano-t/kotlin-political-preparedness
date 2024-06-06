@@ -8,10 +8,6 @@
         android:layout_height="match_parent"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
-        <!-- TODO: Add image for home screen logo. -->
-
-        <!-- TODO: Add Button to navigate to upcoming elections. -->
-
         <ImageView
             android:id="@+id/img_logo"
             android:layout_width="wrap_content"
@@ -23,15 +19,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ballot_logo" />
 
-        <!-- TODO: Add Button to navigate to representatives. -->
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/upcomingButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_padding"
             android:layout_marginStart="@dimen/default_padding"
             android:layout_marginEnd="@dimen/default_padding"
+            android:layout_marginBottom="@dimen/default_padding"
             android:background="@color/colorPrimaryDark"
             android:text="@string/upcoming_elections"
             android:textColor="@color/white"
@@ -53,7 +47,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent" />
-
-
+        
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
