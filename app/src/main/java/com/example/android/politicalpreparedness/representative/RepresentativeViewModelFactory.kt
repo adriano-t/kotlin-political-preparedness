@@ -1,19 +1,18 @@
-package com.example.android.politicalpreparedness.election
+package com.example.android.politicalpreparedness.representative
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.network.CivicsApiService
 
-class ElectionsViewModelFactory(
+class RepresentativeViewModelFactory(
     private val app: Application,
-    private val apiService: CivicsApiService,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ElectionsViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(RepresentativeViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ElectionsViewModel(app, apiService) as T
+            return RepresentativeViewModel(app) as T
         }
-        throw IllegalArgumentException("modelClass is not assignable from ElectionsViewModel")
+        throw IllegalArgumentException("modelClass is not assignable from RepresentativeViewModel")
     }
 }

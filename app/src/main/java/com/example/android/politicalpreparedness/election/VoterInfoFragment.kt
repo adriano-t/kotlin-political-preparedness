@@ -32,8 +32,7 @@ class VoterInfoFragment : Fragment() {
         viewModel = ViewModelProvider(
             this, VoterInfoViewModelFactory(
                 electionDatabase.electionDao,
-                requireContext()
-
+                requireActivity().application
             )
         )[VoterInfoViewModel::class.java]
 

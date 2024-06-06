@@ -3,7 +3,6 @@
     <string-array name="states">
         <item>Alabama</item>
         <item>Alaska</item>
-        <item>American Samoa</item>
         <item>Arizona</item>
         <item>Arkansas</item>
         <item>California</item>
@@ -38,12 +37,10 @@
         <item>New York</item>
         <item>North Carolina</item>
         <item>North Dakota</item>
-        <item>Northern Marianas Islands</item>
         <item>Ohio</item>
         <item>Oklahoma</item>
         <item>Oregon</item>
         <item>Pennsylvania</item>
-        <item>Puerto Rico</item>
         <item>Rhode Island</item>
         <item>South Carolina</item>
         <item>South Dakota</item>
@@ -52,7 +49,6 @@
         <item>Utah</item>
         <item>Vermont</item>
         <item>Virginia</item>
-        <item>Virgin Islands</item>
         <item>Washington</item>
         <item>West Virginia</item>
         <item>Wisconsin</item>

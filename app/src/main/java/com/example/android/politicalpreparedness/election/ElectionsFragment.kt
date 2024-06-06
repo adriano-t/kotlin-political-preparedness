@@ -25,14 +25,9 @@ class ElectionsFragment: Fragment() {
         savedInstanceState: Bundle?)
     : View {
         binding = FragmentElectionBinding.inflate(inflater, container, false)
-        Timber.i("bound inflated layout")
 
-        val application = requireNotNull(this.activity).application
-        val apiService = CivicsApi.retrofitService
-
-        val viewModelFactory = ElectionsViewModelFactory(application, apiService)
+        val viewModelFactory = ElectionsViewModelFactory(requireActivity().application, CivicsApi.retrofitService)
         viewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
-
         Timber.tag(javaClass.name).i("created viewmodel")
         binding.viewModel = viewModel
         binding.lifecycleOwner = this

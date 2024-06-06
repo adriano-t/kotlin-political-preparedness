@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
+import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -16,7 +17,7 @@ import timber.log.Timber
 
 class VoterInfoViewModel(
     private val electionDao: ElectionDao,
-    private val context: Context,
+    private val application: Application,
 ) : ViewModel() {
 
 
@@ -45,7 +46,7 @@ class VoterInfoViewModel(
                 )
                 _address.value =
                     _voterInfo.value?.state?.first()?.electionAdministrationBody?.correspondenceAddress?.toFormattedString()
-                        ?: context.getString(R.string.not_available)
+                        ?: application.getString(R.string.not_available)
 
                 Timber.tag(javaClass.name).d("voterInfo value: ${_voterInfo.value}")
             } catch (ex: Exception) {
@@ -61,7 +62,7 @@ class VoterInfoViewModel(
         if (url != null) {
             _targetUrl.value = url
         } else {
-            Toast.makeText(context, context.getString(R.string.voting_information_page_not_available), Toast.LENGTH_LONG).show()
+            Toast.makeText(application, application.getString(R.string.voting_information_page_not_available), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -70,7 +71,7 @@ class VoterInfoViewModel(
         if (url != null) {
             _targetUrl.value = url
         } else {
-            Toast.makeText(context, context.getString(R.string.ballot_information_page_not_available), Toast.LENGTH_LONG).show()
+            Toast.makeText(application, application.getString(R.string.ballot_information_page_not_available), Toast.LENGTH_LONG).show()
         }
 
     }
@@ -86,7 +87,7 @@ class VoterInfoViewModel(
 
     //TODO: Add var and methods to save and remove elections to local database
     fun toggleFollowing() {
-        Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
+        Toast.makeText(application, "Not implemented", Toast.LENGTH_SHORT).show()
     }
     /**
      * Hint: The saved state can be accomplished in multiple ways.

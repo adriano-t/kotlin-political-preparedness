@@ -1,5 +1,8 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.app.Application
+import android.provider.Telephony.Mms.Addr
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +15,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RepresentativeViewModel(
-    private val civicApi: CivicsApi,
+    private val application: Application,
 ) : ViewModel() {
 
     //Establish live data for representatives and address
@@ -20,22 +23,38 @@ class RepresentativeViewModel(
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    private var _queryAddress = MutableLiveData<Address>()
-    val queryAddress: LiveData<Address>
-        get() = _queryAddress
+    val line1 = ObservableField<String>()
+    val line2 = ObservableField<String?>()
+    val city = ObservableField<String>()
+    val state = ObservableField<String>()
+    val zip = ObservableField<String>()
+
+    fun buildAddress(): Address {
+       return Address(
+            line1 = line1.get() ?: "",
+            line2 = line2.get(),
+            city = city.get() ?: "",
+            state = state.get() ?: "",
+            zip = zip.get() ?: ""
+        )
+    }
 
     // fetch representatives from API from a provided address
-    fun getRepresentatives(address: Address) {
+    private fun getRepresentatives(address: Address) {
         viewModelScope.launch {
             try {
-                val (offices, officials) = civicApi.retrofitService.getRepresentatives(address.toFormattedString())
+                val (offices, officials) = CivicsApi.retrofitService.getRepresentatives(address.toFormattedString())
                 _representatives.value = offices.flatMap { office: Office ->
                     office.getRepresentatives(officials)
                 }
             } catch (e: Exception) {
-                Timber.tag(TAG).e(e.localizedMessage)
+                Timber.tag(javaClass.name).e(e.localizedMessage)
             }
         }
+    }
+
+    fun search() {
+        getRepresentatives(buildAddress())
     }
 
     //TODO: Create function get address from geo location
@@ -48,7 +67,4 @@ class RepresentativeViewModel(
 
     }
 
-    companion object {
-        const val TAG = "RepresentativeViewModel"
-    }
 }
