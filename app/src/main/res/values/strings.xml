@@ -9,6 +9,11 @@
     <string name="representative_facebook">Representative Facebook</string>
     <string name="representative_twitter">Representative Twitter</string>
     <string name="elections">Elections</string>
+    <string name="state_ballot"><![CDATA[State Ballot >]]></string>
+    <string name="state_locations"><![CDATA[State Locations >]]></string>
+    <string name="address">Address</string>
+    <string name="links">Links</string>
+    <string name="not_available">Not available</string>
 
     <!-- TODO: Add necessary string values -->
 

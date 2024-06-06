@@ -20,7 +20,11 @@ class ElectionListAdapter(private val clickListener: ElectionListener) :
     }
 
     override fun onBindViewHolder(viewHolder: ElectionViewHolder, pos: Int) {
-        viewHolder.bind(getItem(pos))
+        val election = getItem(pos)
+        viewHolder.bind(election)
+        viewHolder.itemView.setOnClickListener{
+            clickListener.onClick(election)
+        }
     }
 
 }
@@ -29,7 +33,6 @@ class ElectionViewHolder(private var binding: ListItemElectionBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(election: Election) {
         binding.election = election
-
         // Call binding.executePendingBindings(), which causes the update to execute immediately.
         binding.executePendingBindings()
     }

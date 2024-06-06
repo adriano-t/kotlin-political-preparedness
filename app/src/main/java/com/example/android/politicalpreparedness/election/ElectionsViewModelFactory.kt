@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.network.CivicsApiService
 
-//TODO: Create Factory to generate ElectionViewModel with provided election datasource
+//Create Factory to generate ElectionViewModel with provided election datasource
 class ElectionsViewModelFactory(
     private val app: Application,
     private val apiService: CivicsApiService,

@@ -11,6 +11,7 @@ import com.example.android.politicalpreparedness.network.CivicsApiService
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
 //TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel(
@@ -28,22 +29,31 @@ class ElectionsViewModel(
     val savedElections: LiveData<List<Election>>
         get() = _savedElections
 
+    private val _navigateToVoterInfo = MutableLiveData<Election>()
+    val navigateToVoterInfo: LiveData<Election>
+        get() = _navigateToVoterInfo
+
     //Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
     init {
         Timber.tag(TAG).i("Viewmodel initialized")
-       fetchUpcomingElections()
     }
 
-    private fun fetchUpcomingElections() {
+    fun fetchUpcomingElections() {
         viewModelScope.launch {
-
+            try {
                 Timber.tag(TAG).i("trying to get elections")
                 val response = apiService.getElections()
                 Timber.tag(TAG).i("got elections")
                 _upcomingElections.value = response.elections
+            }
+            catch (ex: Exception) {
+                Timber.e(ex)
+            }
 
         }
     }
+
+
 
     companion object {
         const val TAG = "ElectionsViewModel"

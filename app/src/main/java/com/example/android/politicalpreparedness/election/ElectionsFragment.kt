@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
@@ -17,7 +18,6 @@ class ElectionsFragment: Fragment() {
 
     private lateinit var binding: FragmentElectionBinding
     private lateinit var viewModel: ElectionsViewModel
-    // TODO: Declare ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,21 +36,25 @@ class ElectionsFragment: Fragment() {
         Timber.tag(ElectionsViewModel.TAG).i("created viewmodel")
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        val adapter = ElectionListAdapter(ElectionListener { election ->
-            // Handle election item click
+
+        // Populate recycler adapters
+        binding.upcomingElections.adapter = ElectionListAdapter(ElectionListener { election ->
+            // Link elections to voter info
+            this.findNavController().navigate(
+                ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+                    election.id,
+                    election.division
+                )
+            )
         })
 
-        binding.upcomingElections.adapter = adapter
-
         return binding.root
-        // TODO: Add binding values
 
-        // TODO: Link elections to voter info
-
-        // TODO: Initiate recycler adapters
-
-        // TODO: Populate recycler adapters
     }
 
-    // TODO: Refresh adapters when fragment loads
+    // Refresh adapters when fragment loads
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchUpcomingElections()
+    }
 }
