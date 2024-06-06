@@ -9,11 +9,13 @@
     <string name="representative_facebook">Representative Facebook</string>
     <string name="representative_twitter">Representative Twitter</string>
     <string name="elections">Elections</string>
-    <string name="state_ballot"><![CDATA[State Ballot >]]></string>
-    <string name="state_locations"><![CDATA[State Locations >]]></string>
+    <string name="state_ballot"><![CDATA[Ballot Information >]]></string>
+    <string name="state_locations"><![CDATA[Voting Locations >]]></string>
     <string name="address">Address</string>
-    <string name="links">Links</string>
+    <string name="links">Election Information</string>
     <string name="not_available">Not available</string>
+    <string name="voting_information_page_not_available">Voting information page not available</string>
+    <string name="ballot_information_page_not_available">Ballot information page not available</string>
 
     <!-- TODO: Add necessary string values -->
 

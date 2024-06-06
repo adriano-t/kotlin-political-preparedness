@@ -23,7 +23,7 @@ class VoterInfoFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
 
         binding = FragmentVoterInfoBinding.inflate(inflater)
 

@@ -1,7 +1,7 @@
 package com.example.android.politicalpreparedness.election
 
-import android.app.Application
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.CivicsApiService
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.launch
@@ -58,13 +57,22 @@ class VoterInfoViewModel(
 
     //TODO: Add var and methods to support loading URLs
     fun stateLocationsClick() {
-        _targetUrl.value =
-            _voterInfo.value?.state?.first()?.electionAdministrationBody?.votingLocationFinderUrl
+        val url = _voterInfo.value?.state?.first()?.electionAdministrationBody?.votingLocationFinderUrl;
+        if (url != null) {
+            _targetUrl.value = url
+        } else {
+            Toast.makeText(context, context.getString(R.string.voting_information_page_not_available), Toast.LENGTH_LONG).show()
+        }
     }
 
     fun stateBallotClick() {
-        _targetUrl.value =
-            _voterInfo.value?.state?.first()?.electionAdministrationBody?.ballotInfoUrl
+        val url = _voterInfo.value?.state?.first()?.electionAdministrationBody?.ballotInfoUrl;
+        if (url != null) {
+            _targetUrl.value = url
+        } else {
+            Toast.makeText(context, context.getString(R.string.ballot_information_page_not_available), Toast.LENGTH_LONG).show()
+        }
+
     }
 
     fun setNavigationComplete() {

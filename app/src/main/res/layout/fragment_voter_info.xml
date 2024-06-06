@@ -23,6 +23,8 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/default_padding"
             android:singleLine="true"
+            android:background="@color/colorAccent"
+            app:titleTextColor="@color/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@{viewModel.voterInfo.election.name}"
             tools:title="Election name" />
