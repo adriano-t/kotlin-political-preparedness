@@ -79,11 +79,14 @@ class VoterInfoViewModel(
         _targetUrl.value = null
     }
 
-    //TODO: Add var and methods to save and remove elections to local database
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-
+    //TODO: Populate initial state of save button to reflect proper action based on election saved status
     fun getElectionFollowedText(): String {
         return "Follow";
+    }
+
+    //TODO: Add var and methods to save and remove elections to local database
+    fun toggleFollowing() {
+        Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
     }
     /**
      * Hint: The saved state can be accomplished in multiple ways.
