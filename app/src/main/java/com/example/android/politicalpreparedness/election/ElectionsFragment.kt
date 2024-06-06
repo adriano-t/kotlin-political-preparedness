@@ -33,7 +33,7 @@ class ElectionsFragment: Fragment() {
         val viewModelFactory = ElectionsViewModelFactory(application, apiService)
         viewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
 
-        Timber.tag(ElectionsViewModel.TAG).i("created viewmodel")
+        Timber.tag(javaClass.name).i("created viewmodel")
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -49,7 +49,6 @@ class ElectionsFragment: Fragment() {
         })
 
         return binding.root
-
     }
 
     // Refresh adapters when fragment loads
