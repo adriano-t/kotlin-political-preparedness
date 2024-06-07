@@ -43,6 +43,16 @@ class ElectionsFragment: Fragment() {
             )
         })
 
+        binding.savedElections.adapter = ElectionListAdapter(ElectionListener { election ->
+            // Link elections to voter info
+            this.findNavController().navigate(
+                ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+                    election.id,
+                    election.division
+                )
+            )
+        })
+
         return binding.root
     }
 
@@ -50,5 +60,6 @@ class ElectionsFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.fetchUpcomingElections()
+        viewModel.loadSavedElections()
     }
 }

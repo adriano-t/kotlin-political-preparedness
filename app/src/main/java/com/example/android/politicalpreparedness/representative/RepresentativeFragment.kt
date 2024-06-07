@@ -1,23 +1,35 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.Toast
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.politicalpreparedness.BuildConfig
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListener
-import com.example.android.politicalpreparedness.representative.adapter.setNewValue
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 import java.util.Locale
 
@@ -28,10 +40,9 @@ class DetailFragment : Fragment() {
     private lateinit var viewModel: RepresentativeViewModel
 
     companion object {
-        //TODO: Add Constant for Location request
+        private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val REQUEST_TURN_DEVICE_LOCATION_ON = 2
     }
-
-    //TODO: Declare ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,26 +50,17 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
 
+        val mLocationRequest = LocationRequest()
+        mLocationRequest.setInterval(60000)
+        mLocationRequest.setFastestInterval(5000)
         binding = FragmentRepresentativeBinding.inflate(layoutInflater)
-        //TODO: Establish bindings
-
-        //TODO: Define and assign Representative adapter
-
-        //TODO: Populate Representative adapter
-
-        //TODO: Establish button listeners for field and location search
 
         val viewModelFactory = RepresentativeViewModelFactory(requireActivity().application)
         viewModel = ViewModelProvider(this, viewModelFactory)[RepresentativeViewModel::class.java]
-        Timber.tag(javaClass.name).i("created viewmodel")
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-
         // Populate recycler adapters
-        binding.representativesList.adapter =
-            RepresentativeListAdapter(RepresentativeListener { representative ->
-
-            })
+        binding.representativesList.adapter = RepresentativeListAdapter(RepresentativeListener {})
 
         binding.buttonSearch.setOnClickListener {
             viewModel.search()
@@ -66,38 +68,126 @@ class DetailFragment : Fragment() {
         }
 
         binding.buttonLocation.setOnClickListener {
-            getLocation()
+            if (checkLocationPermissions()) {
+                enableLocationSettingsAndGetLocation()
+            }
         }
 
         return binding.root
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
+            if (resultCode == Activity.RESULT_OK) {
+                getLocation()
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.location_services_required),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    @SuppressLint("VisibleForTests")
+    private fun enableLocationSettingsAndGetLocation() {
+        val locationRequest: LocationRequest =
+            LocationRequest.create().setInterval(10000).setFastestInterval(10000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        LocationServices.getSettingsClient(requireActivity()).checkLocationSettings(builder.build())
+            .addOnSuccessListener(requireActivity()) { getLocation() }
+            .addOnFailureListener(requireActivity()) { ex ->
+                if (ex is ResolvableApiException) {
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),  and check the result in onActivityResult().
+                        startIntentSenderForResult(
+                            ex.resolution.intentSender,
+                            REQUEST_TURN_DEVICE_LOCATION_ON,
+                            null,
+                            0,
+                            0,
+                            0,
+                            null
+                        )
+
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        Timber.e(javaClass.name, "error asking the permission")
+                    }
+                }
+            }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
+        permissions: Array<String>,
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //TODO: Handle location permission result to get location on permission granted
+        // Check if location permissions are granted
+        if (grantResults.isNotEmpty()) {
+            if (grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+                enableLocationSettingsAndGetLocation()
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.pls_enable_location_permissions),
+                    Snackbar.LENGTH_LONG
+                ).setAction("Settings") {
+                    startActivity(Intent().apply {
+                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    })
+                }.show()
+            }
+        }
     }
 
     private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
             true
         } else {
-            //TODO: Request Location permissions
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ), REQUEST_LOCATION_PERMISSION
+            )
             false
         }
     }
 
     private fun isPermissionGranted(): Boolean {
-        //TODO: Check if permission is already granted and return (true = granted, false = denied/other)
-        return false
+        return checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
+    @SuppressLint("MissingPermission")
     private fun getLocation() {
-        //TODO: Get location from LocationServices
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                val address = geoCodeLocation(location)
+                if (address != null) {
+                    viewModel.setAddress(address)
+                }
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.could_not_find_location), Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }.addOnFailureListener {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.could_not_find_location), Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun geoCodeLocation(location: Location): Address? {

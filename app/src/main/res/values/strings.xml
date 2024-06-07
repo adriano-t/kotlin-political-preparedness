@@ -16,6 +16,11 @@
     <string name="not_available">Not available</string>
     <string name="voting_information_page_not_available">Voting information page not available</string>
     <string name="ballot_information_page_not_available">Ballot information page not available</string>
+    <string name="could_not_find_location">Location services could not find your position</string>
+    <string name="location_services_required">Location services are required for this action</string>
+    <string name="pls_enable_location_permissions">Enable Location permissions from your phone settings</string>
+    <string name="followed_elections">Followed Elections</string>
+    <string name="retry">Could not follow, retry later</string>
 
 
 </resources>

@@ -1,7 +1,6 @@
 package com.example.android.politicalpreparedness.representative
 
 import android.app.Application
-import android.provider.Telephony.Mms.Addr
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,7 +28,8 @@ class RepresentativeViewModel(
     val state = ObservableField<String>()
     val zip = ObservableField<String>()
 
-    fun buildAddress(): Address {
+
+    fun getAddress(): Address {
        return Address(
             line1 = line1.get() ?: "",
             line2 = line2.get(),
@@ -37,6 +37,14 @@ class RepresentativeViewModel(
             state = state.get() ?: "",
             zip = zip.get() ?: ""
         )
+    }
+
+    fun setAddress(address: Address) {
+        line1.set(address.line1)
+        line2.set(address.line2)
+        city.set(address.city)
+        state.set(address.state)
+        zip.set(address.zip)
     }
 
     // fetch representatives from API from a provided address
@@ -54,17 +62,7 @@ class RepresentativeViewModel(
     }
 
     fun search() {
-        getRepresentatives(buildAddress())
-    }
-
-    //TODO: Create function get address from geo location
-    fun getAddressFromGeolocation() {
-
-    }
-
-    //TODO: Create function to get address from individual fields
-    fun getAddressFromFields() {
-
+        getRepresentatives(getAddress())
     }
 
 }

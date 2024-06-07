@@ -27,7 +27,6 @@ class VoterInfoFragment : Fragment() {
 
         binding = FragmentVoterInfoBinding.inflate(inflater)
 
-        // TODO: Add ViewModel values and create ViewModel
         val electionDatabase = ElectionDatabase.getInstance(requireActivity())
         viewModel = ViewModelProvider(
             this, VoterInfoViewModelFactory(
@@ -39,11 +38,9 @@ class VoterInfoFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        // TODO: Add binding values
-
-        // TODO: Populate voter info -- hide views without provided data.
         val args = VoterInfoFragmentArgs.fromBundle(requireArguments())
         if (args.argDivision.country.isNotEmpty()) {
+            viewModel.setElectonId(args.argElectionId);
             viewModel.getVoterInfo(args.argElectionId, args.argDivision)
         } else {
             Timber.tag(javaClass.simpleName).e("Country and state should be valued $args")
@@ -52,15 +49,13 @@ class VoterInfoFragment : Fragment() {
             ).show()
         }
 
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-         */
 
         // Handle loading of URLs
         viewModel.targetUrl.observe(viewLifecycleOwner, Observer { url ->
             if (url != null) openUrl(url)
         })
 
+        // TODO: hide views without provided data.
         // TODO: Handle save button UI state
         // TODO: cont'd Handle save button clicks
         return binding.root

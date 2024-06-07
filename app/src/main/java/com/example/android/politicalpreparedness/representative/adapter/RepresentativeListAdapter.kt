@@ -37,6 +37,9 @@ class RepresentativeViewHolder(val binding: ListItemRepresentativeBinding) :
     fun bind(item: Representative) {
         binding.representative = item
         binding.reprPropic.setImageResource(R.drawable.ic_profile)
+        binding.reprIconFacebook.visibility = View.INVISIBLE
+        binding.reprIconTwitter.visibility = View.INVISIBLE
+        binding.reprIconFacebook.visibility = View.INVISIBLE
         //Show social links ** Hint: Use provided helper methods
         item.official.channels?.let { showSocialLinks(it) }
         //Show www link ** Hint: Use provided helper methods

@@ -1,7 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
 import android.app.Application
-import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.database.ElectionDao
+import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
@@ -20,11 +20,12 @@ class VoterInfoViewModel(
     private val application: Application,
 ) : ViewModel() {
 
-
-    //TODO: Add live data to hold voter info
+    private val database = ElectionDatabase.getInstance(application)
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
     val voterInfo: LiveData<VoterInfoResponse>
         get() = _voterInfo
+
+    private val _electionId = MutableLiveData<Int>()
 
     private val _address = MutableLiveData<String>()
     val address: LiveData<String>
@@ -34,8 +35,22 @@ class VoterInfoViewModel(
     val targetUrl: LiveData<String?>
         get() = _targetUrl
 
+    private val _followedText = MutableLiveData<String>("Loading")
+    val followedText: LiveData<String>
+        get() = _followedText
 
-    //TODO: Add var and methods to populate voter info
+    fun setElectonId(electionId: Int) {
+        viewModelScope.launch {
+            _electionId.value = electionId
+            val isElectionFollowed = database.electionDao.getElection(electionId) != null
+            if (isElectionFollowed) {
+                _followedText.value = "Unfollow"
+            } else {
+                _followedText.value = "Follow"
+            }
+        }
+    }
+
 
     fun getVoterInfo(electionId: Int, division: Division) {
         viewModelScope.launch {
@@ -56,13 +71,17 @@ class VoterInfoViewModel(
         }
     }
 
-    //TODO: Add var and methods to support loading URLs
     fun stateLocationsClick() {
-        val url = _voterInfo.value?.state?.first()?.electionAdministrationBody?.votingLocationFinderUrl;
+        val url =
+            _voterInfo.value?.state?.first()?.electionAdministrationBody?.votingLocationFinderUrl;
         if (url != null) {
             _targetUrl.value = url
         } else {
-            Toast.makeText(application, application.getString(R.string.voting_information_page_not_available), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                application,
+                application.getString(R.string.voting_information_page_not_available),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -71,24 +90,45 @@ class VoterInfoViewModel(
         if (url != null) {
             _targetUrl.value = url
         } else {
-            Toast.makeText(application, application.getString(R.string.ballot_information_page_not_available), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                application,
+                application.getString(R.string.ballot_information_page_not_available),
+                Toast.LENGTH_LONG
+            ).show()
         }
-
     }
 
     fun setNavigationComplete() {
         _targetUrl.value = null
     }
 
-    //TODO: Populate initial state of save button to reflect proper action based on election saved status
-    fun getElectionFollowedText(): String {
-        return "Follow";
-    }
-
     //TODO: Add var and methods to save and remove elections to local database
     fun toggleFollowing() {
-        Toast.makeText(application, "Not implemented", Toast.LENGTH_SHORT).show()
+        viewModelScope.launch {
+            try {
+                val electionId = _electionId.value ?: return@launch
+                val election = _voterInfo.value?.election
+
+                val isElectionFollowed = database.electionDao.getElection(electionId) != null
+
+                if (isElectionFollowed) {
+                    database.electionDao.deleteElection(electionId)
+                    _followedText.value = "Follow"
+                } else if (election != null) {
+                    database.electionDao.insert(election)
+                    _followedText.value = "Unfollow"
+                }
+
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to toggle following state")
+                Toast.makeText(
+                    application, application.getString(R.string.retry), Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
+
+
     /**
      * Hint: The saved state can be accomplished in multiple ways.
      * It is directly related to how elections are saved/removed from the database.
