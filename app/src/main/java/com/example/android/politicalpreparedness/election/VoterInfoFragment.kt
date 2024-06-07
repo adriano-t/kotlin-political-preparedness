@@ -49,15 +49,23 @@ class VoterInfoFragment : Fragment() {
             ).show()
         }
 
-
         // Handle loading of URLs
-        viewModel.targetUrl.observe(viewLifecycleOwner, Observer { url ->
+        viewModel.targetUrl.observe(viewLifecycleOwner) { url ->
             if (url != null) openUrl(url)
-        })
+        }
 
-        // TODO: hide views without provided data.
-        // TODO: Handle save button UI state
-        // TODO: cont'd Handle save button clicks
+        viewModel.isBallotInfoAvailable.observe(viewLifecycleOwner) { isAvailable ->
+            binding.stateBallot.visibility = if (isAvailable) View.VISIBLE else View.GONE
+        }
+
+        viewModel.isVotingLocationAvailable.observe(viewLifecycleOwner) { isAvailable ->
+            binding.stateLocations.visibility = if (isAvailable) View.VISIBLE else View.GONE
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         return binding.root
     }
 

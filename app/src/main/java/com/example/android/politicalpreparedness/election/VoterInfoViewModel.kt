@@ -39,6 +39,18 @@ class VoterInfoViewModel(
     val followedText: LiveData<String>
         get() = _followedText
 
+    private val _isBallotInfoAvailable = MutableLiveData<Boolean>()
+    val isBallotInfoAvailable: LiveData<Boolean>
+        get() = _isBallotInfoAvailable
+
+    private val _isVotingLocationAvailable = MutableLiveData<Boolean>()
+    val isVotingLocationAvailable: LiveData<Boolean>
+        get() = _isVotingLocationAvailable
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     fun setElectonId(electionId: Int) {
         viewModelScope.launch {
             _electionId.value = electionId
@@ -54,6 +66,7 @@ class VoterInfoViewModel(
 
     fun getVoterInfo(electionId: Int, division: Division) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 val address = "${division.state.ifEmpty { "dc" }}, ${division.country}"
                 _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(
@@ -62,11 +75,14 @@ class VoterInfoViewModel(
                 _address.value =
                     _voterInfo.value?.state?.first()?.electionAdministrationBody?.correspondenceAddress?.toFormattedString()
                         ?: application.getString(R.string.not_available)
-
+                _isBallotInfoAvailable.value = _voterInfo.value?.state?.first()?.electionAdministrationBody?.ballotInfoUrl != null
+                _isVotingLocationAvailable.value = _voterInfo.value?.state?.first()?.electionAdministrationBody?.votingLocationFinderUrl != null
                 Timber.tag(javaClass.name).d("voterInfo value: ${_voterInfo.value}")
             } catch (ex: Exception) {
                 Timber.tag(javaClass.name).e(ex);
                 Timber.tag(javaClass.name).e("Error retrieving voter info")
+            }finally {
+                _isLoading.value = false
             }
         }
     }
