@@ -1,11 +1,13 @@
 package com.example.android.politicalpreparedness.representative
 
 import android.app.Application
+import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.network.models.Office
@@ -21,6 +23,10 @@ class RepresentativeViewModel(
     private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>>
         get() = _representatives
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
     val line1 = ObservableField<String>()
     val line2 = ObservableField<String?>()
@@ -50,6 +56,11 @@ class RepresentativeViewModel(
     // fetch representatives from API from a provided address
     private fun getRepresentatives(address: Address) {
         viewModelScope.launch {
+            if(_isLoading.value == true) {
+                return@launch
+            }
+            _isLoading.value = true
+            _representatives.value = arrayListOf()
             try {
                 val (offices, officials) = CivicsApi.retrofitService.getRepresentatives(address.toFormattedString())
                 _representatives.value = offices.flatMap { office: Office ->
@@ -57,6 +68,11 @@ class RepresentativeViewModel(
                 }
             } catch (e: Exception) {
                 Timber.tag(javaClass.name).e(e.localizedMessage)
+                Toast.makeText(
+                    application, application.getString(R.string.retry), Toast.LENGTH_SHORT
+                ).show()
+            } finally {
+                _isLoading.value = false
             }
         }
     }

@@ -8,7 +8,7 @@
     <string name="representative_website">Representative Website</string>
     <string name="representative_facebook">Representative Facebook</string>
     <string name="representative_twitter">Representative Twitter</string>
-    <string name="elections">Elections</string>
+    <string name="elections">Upcoming Elections</string>
     <string name="state_ballot"><![CDATA[Ballot Information >]]></string>
     <string name="state_locations"><![CDATA[Voting Locations >]]></string>
     <string name="address">Address</string>
@@ -20,7 +20,16 @@
     <string name="location_services_required">Location services are required for this action</string>
     <string name="pls_enable_location_permissions">Enable Location permissions from your phone settings</string>
     <string name="followed_elections">Followed Elections</string>
-    <string name="retry">Could not follow, retry later</string>
+    <string name="retry">Could not retrieve data, retry later</string>
+    <string name="use_my_location">Use my location</string>
+    <string name="address_line_1">Address line 1</string>
+    <string name="address_line_2">Address line 2</string>
+    <string name="city">City</string>
+    <string name="zip_code">Zip code</string>
+    <string name="representatives">Representatives</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="loading">Loading</string>
 
 
 </resources>

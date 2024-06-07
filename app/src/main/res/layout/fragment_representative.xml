@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:hint="Address line 1"
+                android:hint="@string/address_line_1"
                 android:inputType="textPostalAddress"
                 android:text="@={viewModel.line1}"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:autofillHints=""
-                android:hint="Address line 2"
+                android:hint="@string/address_line_2"
                 android:inputType="textPostalAddress"
                 android:text="@={viewModel.line2}"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:hint="City"
+                android:hint="@string/city"
                 android:inputType="textPostalAddress"
                 android:text="@={viewModel.city}"
                 app:layout_constraintEnd_toStartOf="@id/state"
@@ -88,7 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:hint="Zip code"
+                android:hint="@string/zip_code"
                 android:inputType="number"
                 android:maxLength="5"
                 android:text="@={viewModel.zip}"
@@ -104,7 +104,7 @@
                 android:layout_marginVertical="@dimen/default_padding"
                 android:background="@color/colorPrimary"
                 android:onClick="@{() -> viewModel.search()}"
-                android:text="Find my representatives"
+                android:text="@string/find_my_representatives"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/zip" />
 
@@ -115,10 +115,19 @@
                 android:layout_marginHorizontal="@dimen/default_padding"
                 android:layout_marginVertical="@dimen/default_padding"
                 android:background="@color/colorPrimary"
-                android:text="Use my location"
+                android:text="@string/use_my_location"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/button_search" />
 
+            <ProgressBar
+                android:id="@+id/progressBarRepresentative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -132,7 +141,7 @@
                 android:id="@+id/representative_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Representatives"
+                android:text="@string/representatives"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/fontSizeTitle"
                 app:layout_constraintStart_toStartOf="parent"
@@ -169,6 +178,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/representative_form_container"
             tools:visibilityMode="ignore" />
+
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

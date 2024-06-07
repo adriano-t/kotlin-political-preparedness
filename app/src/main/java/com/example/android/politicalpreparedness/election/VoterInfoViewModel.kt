@@ -35,7 +35,7 @@ class VoterInfoViewModel(
     val targetUrl: LiveData<String?>
         get() = _targetUrl
 
-    private val _followedText = MutableLiveData<String>("Loading")
+    private val _followedText = MutableLiveData<String>(application.getString(R.string.loading))
     val followedText: LiveData<String>
         get() = _followedText
 
@@ -56,9 +56,9 @@ class VoterInfoViewModel(
             _electionId.value = electionId
             val isElectionFollowed = database.electionDao.getElection(electionId) != null
             if (isElectionFollowed) {
-                _followedText.value = "Unfollow"
+                _followedText.value = application.getString(R.string.follow)
             } else {
-                _followedText.value = "Follow"
+                _followedText.value = application.getString(R.string.unfollow)
             }
         }
     }
@@ -118,7 +118,6 @@ class VoterInfoViewModel(
         _targetUrl.value = null
     }
 
-    //TODO: Add var and methods to save and remove elections to local database
     fun toggleFollowing() {
         viewModelScope.launch {
             try {
@@ -129,10 +128,10 @@ class VoterInfoViewModel(
 
                 if (isElectionFollowed) {
                     database.electionDao.deleteElection(electionId)
-                    _followedText.value = "Follow"
+                    _followedText.value = application.getString(R.string.follow)
                 } else if (election != null) {
                     database.electionDao.insert(election)
-                    _followedText.value = "Unfollow"
+                    _followedText.value = application.getString(R.string.unfollow)
                 }
 
             } catch (e: Exception) {
@@ -143,11 +142,5 @@ class VoterInfoViewModel(
             }
         }
     }
-
-
-    /**
-     * Hint: The saved state can be accomplished in multiple ways.
-     * It is directly related to how elections are saved/removed from the database.
-     */
 
 }

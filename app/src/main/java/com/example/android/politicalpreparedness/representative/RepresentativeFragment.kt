@@ -73,6 +73,10 @@ class DetailFragment : Fragment() {
             }
         }
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBarRepresentative.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+        }
+
         return binding.root
     }
 
